@@ -1,0 +1,31 @@
+{
+  "comment": "JSON DVB-T, DVB-C and UDP Install without scanning",
+  "type": "json",
+  "country": "fr",
+  "services": [
+	{
+       "type": "TYPE_DVB_C",
+       "frequency": "474000000",
+       "symbol-rate": "6900000",
+	   "bandwidth": "8000000",
+       "modulation": "qam_64",
+	   "original_network_id": "9018",
+       "transport_stream_id": "4156",
+       "service_id": "6720",
+       "display_name": "BBC Radio 1",
+       "display_number": "5"
+    },
+	{
+       "type": "TYPE_DVB_C",
+       "frequency": "666000000",
+       "symbol-rate": "6900000",
+	   "bandwidth": "8000000",
+       "modulation": "qam_64",
+	   "original_network_id": "10",
+       "transport_stream_id": "1",
+       "service_id": "1",
+       "display_name": "HEv1-Lvl2 96Kbits 44.1KHz",
+       "display_number": "22"
+    }
+	]
+}
