@@ -9,7 +9,7 @@ def send_mail(mail_text, mail_subject, receivers=['ye.yuan5@jgdt.com', '77489814
     # 第三方 SMTP 服务
     mail_host = "smtp.qq.com"  # 设置服务器
     mail_user = "2748652229@qq.com"  # 用户名
-    mail_pass = "qxxicizxfjardcdd"  # 口令
+    mail_pass = "#TODO"  # 口令
 
     def __format_addr(addr):
         # 解析邮件地址，以保证邮有别名可以显示
