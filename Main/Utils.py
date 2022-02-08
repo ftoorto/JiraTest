@@ -1,68 +1,74 @@
 import os
+import subprocess
 import time
 import re
 
-def up(device=None):
-    if device is None:
-        os.popen("adb shell input keyevent DPAD_UP")
+
+def _cmd_device(cmd, device):
+    if device is not None:
+        if device[-5:] != ":5555":
+            device = device + ":5555"
+        return cmd[:4] + ' -s %s ' % device + cmd[4:]
     else:
-        os.popen("adb -s %s shell input keyevent DPAD_UP" % device)
-    time.sleep(1)
+        return cmd
+
+
+def _operate(cmd, device, time_to_sleep):
+    actual_cmd = _cmd_device(cmd, device)
+    proc = subprocess.Popen(actual_cmd)
+    time.sleep(time_to_sleep)
+    return proc
+
+
+def up(device=None):
+    original_cmd = "adb shell input keyevent DPAD_UP"
+    _operate(original_cmd, device, 1)
 
 
 def down(device=None):
-    if device is None:
-        os.popen("adb shell input keyevent DPAD_DOWN")
-    else:
-        os.popen("adb -s %s shell input keyevent DPAD_DOWN" % device)
-    time.sleep(1)
+    original_cmd = "adb shell input keyevent DPAD_DOWN"
+    _operate(original_cmd, device, 1)
 
 
 def left(device=None):
-    if device is None:
-        os.popen("adb shell input keyevent DPAD_LEFT")
-    else:
-        os.popen("adb -s %s shell input keyevent DPAD_LEFT" % device)
-    time.sleep(1)
+    original_cmd = "adb shell input keyevent DPAD_LEFT"
+    _operate(original_cmd, device, 1)
 
 
 def right(device=None):
-    if device is None:
-        os.popen("adb shell input keyevent DPAD_RIGHT")
-    else:
-        os.popen("adb -s %s shell input keyevent DPAD_RIGHT" % device)
-    time.sleep(1)
+    original_cmd = "adb shell input keyevent DPAD_RIGHT"
+    _operate(original_cmd, device, 1)
 
 
 def ok(device=None):
-    if device is None:
-        os.popen("adb shell input keyevent ENTER")
-    else:
-        os.popen("adb -s %s shell input keyevent ENTER" % device)
-    time.sleep(1)
+    original_cmd = "adb shell input keyevent ENTER"
+    _operate(original_cmd, device, 1)
 
 
 def back(device=None):
-    if device is None:
-        os.popen("adb shell input keyevent BACK")
-    else:
-        os.popen("adb -s %s shell input keyevent BACK"%device)
-    time.sleep(1)
+    original_cmd = "adb shell input keyevent BACK"
+    _operate(original_cmd, device, 1)
 
 
-def home():
-    os.system("adb shell input keyevent HOME")
-    time.sleep(5)
+def home(device=None):
+    original_cmd = "adb shell input keyevent HOME"
+    _operate(original_cmd, device, 1)
 
 
-def fast_forward(i=1):
-    os.system("adb shell input keyevent KEYCODE_MEDIA_FAST_FORWARD")
-    time.sleep(i)
+def fast_forward(device=None, time=1):
+    original_cmd1 = "adb shell sendevent /dev/input/event6: 0004 0004 000c0045"
+    original_cmd2 = "adb shell sendevent /dev/input/event6: 0001 006a 00000001"
+    original_cmd3 = "adb shell sendevent /dev/input/event6: 0000 0000 00000000"
+    original_cmd4 = "adb shell sendevent /dev/input/event6: 0004 0004 000c0045"
+    original_cmd5 = "adb shell sendevent /dev/input/event6: 0001 006a 00000000"
+    original_cmd6 = "adb shell sendevent /dev/input/event6: 0000 0000 00000000"
+
+    _operate(original_cmd, device, time)
 
 
-def rewind(i=1):
-    os.system("adb shell input keyevent KEYCODE_MEDIA_REWIND")
-    time.sleep(i)
+def rewind(device=None, time=1):
+    original_cmd = "adb shell input keyevent KEYCODE_MEDIA_REWIND"
+    _operate(original_cmd, device, time)
 
 
 def play(device=None, i=1):
