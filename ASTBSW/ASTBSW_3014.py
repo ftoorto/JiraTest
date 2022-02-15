@@ -8,8 +8,10 @@ def start_test(device):
         times = 0
         while True:
             times = times + 1
-            for j in range(4,15):
-                if STB.adb_check(device):
+            for j in range(15):
+                if not STB.adb_check(device):
+                    return -1
+                else:
                     # 打开settings
                     STB.settings()
                     time.sleep(3)
@@ -19,7 +21,8 @@ def start_test(device):
                     STB.up()
                     STB.ok()
                     # 进入display菜单
-                    for i in range(11):
+                    # 也有可能是10
+                    for i in range(10):
                         STB.down()
                     STB.ok()
                     # 选择resolution
@@ -43,7 +46,7 @@ def start_test(device):
                     # 准备重启,android 10 以上
                     STB.right()
                     STB.ok()
-                    time.sleep(90)
+                    time.sleep(120)
                     print("第", j, "次重启")
                     if times > 1000:
                         return
@@ -53,5 +56,5 @@ def start_test(device):
 
 if __name__ == "__main__":
     # dev = sys.argv[1]
-    dev = "192.168.1.104:5555"
+    dev = "192.168.1.107:5555"
     start_test(dev)

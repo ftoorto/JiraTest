@@ -13,3 +13,10 @@
 __pycache__/
 /Main/qqmail.py
 /venv/
+/.idea/.gitignore
+/.idea/.name
+/.idea/JiraTest.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml

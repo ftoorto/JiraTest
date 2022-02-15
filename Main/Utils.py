@@ -4,7 +4,7 @@ import time
 import re
 
 
-def _cmd_device(cmd, device):
+def _cmd_device(cmd:str, device:str):
     if device is not None:
         if device[-5:] != ":5555":
             device = device + ":5555"
@@ -13,9 +13,9 @@ def _cmd_device(cmd, device):
         return cmd
 
 
-def _operate(cmd, device, time_to_sleep):
+def _operate(cmd:str, device:str, time_to_sleep:int):
     actual_cmd = _cmd_device(cmd, device)
-    proc = subprocess.Popen(actual_cmd)
+    proc = subprocess.Popen(actual_cmd, stdout=subprocess.PIPE, shell=True)
     time.sleep(time_to_sleep)
     return proc
 
@@ -40,9 +40,9 @@ def right(device=None):
     _operate(original_cmd, device, 1)
 
 
-def ok(device=None):
+def ok(device=None,i=1):
     original_cmd = "adb shell input keyevent ENTER"
-    _operate(original_cmd, device, 1)
+    _operate(original_cmd, device, i)
 
 
 def back(device=None):
@@ -87,8 +87,9 @@ def pause(device=None, i=1):
     time.sleep(i)
 
 
-def __power(i=5):
-    os.system("adb shell input keyevent POWER")
+def __power(device=None, i=5):
+    cmd = "adb shell input keyevent POWER"
+    _operate(cmd, device, 1)
     time.sleep(i)
 
 
@@ -98,25 +99,31 @@ def __on_status():
 
 
 def power_status():
+    cmd = "adb shell dumpsys power |findstr mWakefulness"
+
     result = re.split(' |\n|\t|=|\r', os.popen("adb shell dumpsys power |findstr mWakefulness").read())[3]
     expect_result = {0: "Asleep", 1: "Awake"}
     # TODO
 
 
-def power_on(i=5):
-    result = result = re.split(' |\n|\t|=|\r', os.popen("adb shell dumpsys power |findstr mWakefulness").read())[3]
+def power_on(device=None, i=5):
+    cmd = "adb shell dumpsys power |findstr mWakefulness"
+    proc = _operate(cmd, device, 0)
+    result = re.split(' |\n|\t|=|\r', proc.stdout.read().decode())[3]
     if result == "Asleep":
         print("唤醒设备")
-        __power(i)
+        __power(device,i)
     else:
         print("设备已是On模式，无需唤醒")
 
 
-def power_off(i=5):
-    result = result = re.split(' |\n|\t|=|\r', os.popen("adb shell dumpsys power |findstr mWakefulness").read())[3]
-    if result == "Awake":
+def power_off(device=None, i=5):
+    cmd = "adb shell dumpsys power |findstr mWakefulness"
+    proc = _operate(cmd, device, 0)
+    result = re.split(' |\n|\t|=|\r', proc.stdout.read().decode())[3]
+    if result != "Asleep":
         print("standby设备")
-        __power(i)
+        __power(device,i)
     else:
         print("设备已是睡眠模式，无需再次睡眠")
 
