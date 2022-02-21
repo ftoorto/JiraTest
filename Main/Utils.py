@@ -129,11 +129,8 @@ def power_off(device=None, i=5):
 
 
 def reboot(device=None, i=100):
-    if not device:
-        os.system("adb shell reboot")
-    else:
-        os.system("adb -s %s shell reboot" % device)
-    time.sleep(i)
+    cmd="adb shell reboot"
+    _operate(cmd,device,i)
 
 
 def settings(device=None):
@@ -145,8 +142,10 @@ def settings(device=None):
 
 
 def adb_check(device, result_flag=True, auto_reconnect_flag=True):
-    result = os.popen("adb devices", 'r')
-    adb_devices = result.read()
+    result = subprocess.Popen("adb devices", stdout=subprocess.PIPE, shell=True)
+    adb_devices = result.stdout.read().decode()
+    if device[-5:] != ":5555":
+        device = device + ":5555"
     device_offline = device + "\toffline"
     if (adb_devices.find(device) != -1) and (adb_devices.find(device_offline) == -1):
         if result_flag:
@@ -155,8 +154,9 @@ def adb_check(device, result_flag=True, auto_reconnect_flag=True):
     else:
         if auto_reconnect_flag:
             cmd = "adb connect " + device
-            os.system(cmd)
+            subprocess.Popen(cmd)
             time.sleep(3)
+            adb_devices=subprocess.Popen("adb devices", stdout=subprocess.PIPE, shell=True).stdout.read().decode()
             if (adb_devices.find(device) != -1) and (adb_devices.find(device_offline) == -1):
                 if result_flag:
                     print("adb重连成功")

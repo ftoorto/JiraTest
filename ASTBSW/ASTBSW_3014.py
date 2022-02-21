@@ -22,7 +22,9 @@ def start_test(device):
                     STB.ok()
                     # 进入display菜单
                     # 也有可能是10
-                    for i in range(10):
+                    # jade 是11
+
+                    for i in range(11):
                         STB.down()
                     STB.ok()
                     # 选择resolution
@@ -47,7 +49,7 @@ def start_test(device):
                     STB.right()
                     STB.ok()
                     time.sleep(120)
-                    print("第", j, "次重启")
+                    print("第", times, "次重启")
                     if times > 1000:
                         return
     except KeyboardInterrupt:

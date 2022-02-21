@@ -9,7 +9,8 @@ def start_test(device=None):
         print(r"已循环%d次" % i)
         if(i>100000):
             return
+        i=i+1
 
 
 if __name__ == '__main__':
-    start_test("192.168.1.105")
+    start_test("192.168.1.107")
