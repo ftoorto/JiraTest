@@ -37,7 +37,7 @@ def _device_ref(dev: str):
 """
 
 
-class common_task:
+class CommonTask:
     proc = None
 
     def __init__(self, test_file, test_device):
@@ -55,6 +55,8 @@ class common_task:
             print("任务进程未在运行，终止失败")
         else:
             self.proc.kill()
+            print("任务终止")
+
 
 
 """
@@ -63,7 +65,7 @@ class common_task:
 """
 
 
-class astbsw_task:
+class ASTBSWTask:
     proc = None
 
     def __init__(self, test_case, test_device):
@@ -81,16 +83,21 @@ class astbsw_task:
             print("任务进程未在运行，终止失败")
         else:
             self.proc.kill()
+            print("任务终止")
 
 
 if __name__ == '__main__':
     # task1 = astbsw_task("ASTBSW-3014", "192.168.1.104")
     # res = task1.start_task()
     # print(res.read())
-    task1 = common_task("test", "192.168.144.62")
-    date_task_start = DateTrigger(datetime.datetime(2022, 2, 21, 17, 30, 10), timezone='Asia/Shanghai')
-    # date_task_finish = DateTrigger(datetime.datetime(2022, 1, 21, 14, 41) + datetime.timedelta(15))
+    task1 = CommonTask("test", "192.168.144.62")
+    date_task_start = DateTrigger(datetime.datetime(2022, 2, 22, 17, 55, 10), timezone='Asia/Shanghai')
+    date_task_finish = DateTrigger(datetime.datetime(2022, 2, 22, 17,55, 30), timezone='Asia/Shanghai')
     scheduler = BlockingScheduler()
     scheduler.add_job(task1.start_task, date_task_start)
-    # scheduler.add_job(task1.terminate_task, date_task_finish)
-    scheduler.start()
+    scheduler.add_job(task1.terminate_task, date_task_finish)
+    try:
+        scheduler.start()
+        print("已结束")
+    except(KeyboardInterrupt, SystemExit):
+        scheduler.shutdown()
