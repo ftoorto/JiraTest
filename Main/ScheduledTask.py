@@ -1,9 +1,12 @@
 import os
 import subprocess
 import datetime
+import time
+
 from apscheduler.triggers.date import DateTrigger
 
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def _case_ref(case_name: str):
@@ -76,6 +79,7 @@ class ASTBSWTask:
         case = _case_ref(self.case)
         device = _device_ref(self.device)
         self.proc = subprocess.Popen("python " + case + " " + device)
+        print(self.proc.poll())
         return self.proc.stdout
 
     def terminate_task(self):
@@ -87,17 +91,14 @@ class ASTBSWTask:
 
 
 if __name__ == '__main__':
-    # task1 = astbsw_task("ASTBSW-3014", "192.168.1.104")
-    # res = task1.start_task()
-    # print(res.read())
-    task1 = CommonTask("test", "192.168.144.62")
-    date_task_start = DateTrigger(datetime.datetime(2022, 2, 22, 17, 55, 10), timezone='Asia/Shanghai')
-    date_task_finish = DateTrigger(datetime.datetime(2022, 2, 22, 17,55, 30), timezone='Asia/Shanghai')
+    # 任务scheduler
+    task1 = CommonTask("test", "192.168.144.53")
+    date_task_start = DateTrigger(datetime.datetime(2022, 2, 24, 15, 53, 10), timezone='Asia/Shanghai')
+    # date_task_finish = DateTrigger(datetime.datetime(2022, 2, 24, 15,5, 30), timezone='Asia/Shanghai')
     scheduler = BlockingScheduler()
     scheduler.add_job(task1.start_task, date_task_start)
-    scheduler.add_job(task1.terminate_task, date_task_finish)
-    try:
-        scheduler.start()
-        print("已结束")
-    except(KeyboardInterrupt, SystemExit):
-        scheduler.shutdown()
+    # scheduler.add_job(task1.terminate_task, date_task_finish)
+    # email scheduler
+
+    scheduler.start()
+
