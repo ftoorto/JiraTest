@@ -58,5 +58,5 @@ def start_test(device):
 
 if __name__ == "__main__":
     # dev = sys.argv[1]
-    dev = "192.168.1.107:5555"
+    dev = "192.168.1.101:5555"
     start_test(dev)
