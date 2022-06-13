@@ -90,7 +90,7 @@ def start_test(device):
                     up(device)
                     ok(device)
                     # 进入display菜单
-                    for i in range(11):
+                    for i in range(10):
                         down(device)
                     ok(device)
                     # 选择resolution
@@ -110,7 +110,7 @@ def start_test(device):
                     right(device)
                     ok(device)
                     print("第", j + 1, "次重启")
-                    time.sleep(90)
+                    time.sleep(120)
                 else:
                     print("adb连接断开，测试失败")
                     return
@@ -127,5 +127,5 @@ if __name__ == "__main__":
     # dev = sys.argv[1]
 
     # 设备ip和端口号
-    dev = "192.168.1.104:5555"
+    dev = "192.168.1.105:5555"
     start_test(dev)

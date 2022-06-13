@@ -4,7 +4,7 @@ import time
 import re
 
 
-def _cmd_device(cmd:str, device:str):
+def _cmd_device(cmd: str, device: str):
     if device is not None:
         if device[-5:] != ":5555":
             device = device + ":5555"
@@ -13,7 +13,7 @@ def _cmd_device(cmd:str, device:str):
         return cmd
 
 
-def _operate(cmd:str, device:str, time_to_sleep:int):
+def _operate(cmd: str, device: str, time_to_sleep: int):
     actual_cmd = _cmd_device(cmd, device)
     proc = subprocess.Popen(actual_cmd, stdout=subprocess.PIPE, shell=True)
     time.sleep(time_to_sleep)
@@ -40,7 +40,7 @@ def right(device=None):
     _operate(original_cmd, device, 1)
 
 
-def ok(device=None,i=1):
+def ok(device=None, i=1):
     original_cmd = "adb shell input keyevent ENTER"
     _operate(original_cmd, device, i)
 
@@ -63,7 +63,7 @@ def fast_forward(device=None, time=1):
     original_cmd5 = "adb shell sendevent /dev/input/event6: 0001 006a 00000000"
     original_cmd6 = "adb shell sendevent /dev/input/event6: 0000 0000 00000000"
 
-    _operate(original_cmd, device, time)
+    # _operate(original_cmd, device, time)
 
 
 def rewind(device=None, time=1):
@@ -112,7 +112,7 @@ def power_on(device=None, i=5):
     result = re.split(' |\n|\t|=|\r', proc.stdout.read().decode())[3]
     if result == "Asleep":
         print("唤醒设备")
-        __power(device,i)
+        __power(device, i)
     else:
         print("设备已是On模式，无需唤醒")
 
@@ -123,14 +123,14 @@ def power_off(device=None, i=5):
     result = re.split(' |\n|\t|=|\r', proc.stdout.read().decode())[3]
     if result != "Asleep":
         print("standby设备")
-        __power(device,i)
+        __power(device, i)
     else:
         print("设备已是睡眠模式，无需再次睡眠")
 
 
 def reboot(device=None, i=100):
-    cmd="adb shell reboot"
-    _operate(cmd,device,i)
+    cmd = "adb shell reboot"
+    _operate(cmd, device, i)
 
 
 def settings(device=None):
@@ -156,7 +156,7 @@ def adb_check(device, result_flag=True, auto_reconnect_flag=True):
             cmd = "adb connect " + device
             subprocess.Popen(cmd)
             time.sleep(3)
-            adb_devices=subprocess.Popen("adb devices", stdout=subprocess.PIPE, shell=True).stdout.read().decode()
+            adb_devices = subprocess.Popen("adb devices", stdout=subprocess.PIPE, shell=True).stdout.read().decode()
             if (adb_devices.find(device) != -1) and (adb_devices.find(device_offline) == -1):
                 if result_flag:
                     print("adb重连成功")
@@ -169,3 +169,9 @@ def adb_check(device, result_flag=True, auto_reconnect_flag=True):
             if result_flag:
                 print("result: adb连接断开")
             return False
+
+
+def wol(dev, mac):
+    cmd = ".\\WolCmd " + mac + " " + dev + " 255.255.255.0 7"
+    print(cmd)
+    subprocess.Popen(cmd,stdout=subprocess.PIPE, shell=True)

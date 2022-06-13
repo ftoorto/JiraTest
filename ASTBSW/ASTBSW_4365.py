@@ -5,27 +5,33 @@ sys.path.append("../Main")
 from Main import Utils as STB
 
 
-def start_test(times=100):
-    i = 0
+def start_test(times=10000):
+    j = 0
     while True:
         STB.home()
         [STB.up() for i in range(4)]
-        [STB.down() for i in range(2)]
+        [STB.down() for i in range(1)]
         [STB.left() for i in range(4)]
-        STB.right()
+        [STB.right() for i in range(2)]
         STB.ok()
         time.sleep(20)
         STB.home()
         [STB.up() for i in range(4)]
-        [STB.down() for i in range(2)]
+        [STB.down() for i in range(1)]
         [STB.left() for i in range(4)]
-        STB.right()
-        STB.right()
+        [STB.right() for i in range(3)]
         STB.ok()
         time.sleep(20)
-        i = i + 1
-        print("已测试%d次" % i)
-        if i > times:
+        STB.home()
+        [STB.up() for i in range(4)]
+        [STB.down() for i in range(1)]
+        [STB.left() for i in range(4)]
+        [STB.right() for i in range(4)]
+        STB.ok()
+        time.sleep(20)
+        j = j + 1
+        print("已测试%d次" % j)
+        if j > times:
             return
 
 
@@ -68,4 +74,4 @@ def start_test_4045tlu(device):
 
 
 if __name__ == '__main__':
-    start_test_4045tlu("192.168.1.111")
+    start_test()
